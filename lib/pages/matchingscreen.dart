@@ -21,8 +21,7 @@ class MatchingScreen extends StatefulWidget {
 class _MatchingScreenState extends State<MatchingScreen> with TickerProviderStateMixin{
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  double _radius = 0.0;
-  double _angle = 0.0;
+
   late  AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds:1000),
     vsync: this,)..repeat(reverse: false);
@@ -30,12 +29,7 @@ class _MatchingScreenState extends State<MatchingScreen> with TickerProviderStat
     parent: _controller,
     curve: Curves.linearToEaseOut,
     // elasticOut
-  )..addListener(() {
-    setState(() {
-      _radius = _animation.value * 20;
-      _angle = _animation.value * 4;
-    });
-  });
+  );
   int show=1;
 
   callBack(){
@@ -102,7 +96,6 @@ class _MatchingScreenState extends State<MatchingScreen> with TickerProviderStat
       print(show);
     });
     callBack();
-    ///
     // Future.delayed(Duration(seconds:5)).then((value)  {
     //   show=5;
     //   setState(() {});
@@ -134,7 +127,7 @@ class _MatchingScreenState extends State<MatchingScreen> with TickerProviderStat
       backgroundColor: Colors.black,
         key: scaffoldKey,
         drawer: get_drawer(context,),
-        appBar: appbar1('John Smith',(){scaffoldKey.currentState?.openDrawer();}),
+        appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
         body:show==1? Stack(
           alignment: Alignment.center,
         children: [

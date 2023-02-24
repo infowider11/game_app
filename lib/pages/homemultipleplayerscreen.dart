@@ -6,6 +6,7 @@ import 'package:gameapp/functions/navigation_functions.dart';
 import 'package:gameapp/pages/homescreen.dart';
 import 'package:gameapp/pages/matchingscreen.dart';
 import 'package:gameapp/pages/questionscreen.dart';
+import 'package:gameapp/pages/unlock_screen.dart';
 import 'package:gameapp/widgets/appbar.dart';
 import 'package:gameapp/widgets/custom_text_field.dart';
 import 'package:gameapp/widgets/dropdown.dart';
@@ -24,14 +25,20 @@ class HomeMultiplePlayerScreen extends StatefulWidget {
 
 class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
   String? selectedValue;
+  String? choosenValue;
   List iconlist=[
     MyImages.male,
     MyImages.female
-    // Icon(Icons.female,color: Colors.white,size: 40,),
-    // Icon(Icons.male,color: Colors.white,size: 40,),
   ];
-  TextEditingController code=TextEditingController();
+  TextEditingController person1=TextEditingController();
+  TextEditingController person2=TextEditingController();
+  TextEditingController person3=TextEditingController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+  List player=[
+    {'player': TextEditingController()}
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,7 +46,7 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
         drawer: get_drawer(context,),
         key: scaffoldKey,
         backgroundColor: Colors.black,
-        appBar: appbar1('John Smith',(){scaffoldKey.currentState?.openDrawer();}),
+        appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal:20),
           child: SingleChildScrollView(
@@ -54,6 +61,12 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                   items: [
                    'MILD/FRIENDSHIP','UPLOADED/SEDUCTION','STRONG/PASSION','EXTREME/SEX'
                   ],
+                  selectedValue: choosenValue,
+                  onChanged: (value){
+                    setState(() {choosenValue = value as String?;});
+                    choosenValue == "UPLOADED/SEDUCTION" || choosenValue == "STRONG/PASSION" || choosenValue == "EXTREME/SEX" ?
+                    push(context: context, screen: UnlockScreen()) : null;
+                  },
                 ),
                 vSizedBox2,
                 vSizedBox2,
@@ -80,9 +93,7 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                 Container(
                     padding: EdgeInsets.symmetric(horizontal:20),
                     width: double.infinity,
-                    height: 300,
                     decoration: BoxDecoration(
-                      // boxShadow: [shadow],
                       border:null,
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -92,19 +103,19 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                         )
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         vSizedBox05,
                         Stack(
                           children: [
                             CustomTextField(
-                              controller: code,
+                              controller: person1,
                               hintcolor: Colors.white,
                               textColor: Colors.white,
                               hintText: 'Woman’s Name',
                               bgColor:Colors.black,
                               borderRadius:10,
-                              obscureText: true,
-                              contentPadding: EdgeInsets.symmetric(horizontal: 50),
+                              contentPadding: EdgeInsets.only(left: 52),
                             ),
                             Positioned(
                               top:7,
@@ -126,14 +137,13 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                         Stack(
                           children: [
                             CustomTextField(
-                              controller: code,
+                              controller: person2,
                               hintcolor: Colors.white,
                               textColor: Colors.white,
                               hintText: 'Men Name',
                               bgColor:Colors.black,
                               borderRadius:10,
-                              obscureText: true,
-                              contentPadding: EdgeInsets.symmetric(horizontal: 50),
+                              contentPadding: EdgeInsets.only(left: 52),
                             ),
                             Positioned(
                               top:7,
@@ -152,17 +162,19 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
 
                           ],
                         ),
-                        Stack(
+
+                        ///new person
+                        for(int i=0; i<player.length; i++)
+                          Stack(
                           children: [
                             CustomTextField(
-                              controller: code,
+                              controller: player[i]['player'],
                               hintcolor: Colors.white,
                               textColor: Colors.white,
                               hintText:selectedValue.toString()=='assets/icons/male.png'?"Men's Name":
-                              selectedValue.toString()=='assets/icons/female.png'?'Woman’s Name':'Woman’s Name',
+                              selectedValue.toString()=='assets/icons/female.png'?'Woman’s Name':"Men's Name",
                               bgColor:Colors.black,
                               borderRadius:10,
-                              obscureText: true,
                               contentPadding: EdgeInsets.symmetric(horizontal: 70),
                             ),
                             Positioned(
@@ -228,43 +240,67 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                               ),
 
                             ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal:8,vertical: 20),
-                                child: Icon(Icons.cancel,color: Colors.red,),
+                            GestureDetector(
+                              onTap: (){
+                                player.removeAt(i);
+                                setState(() {
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal:8,vertical: 20),
+                                  child: Icon(Icons.cancel,color: Colors.red,),
+                                ),
                               ),
                             )
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon((Icons.add),color:MyColors.primaryColor,size: 15,),
-                            ParagraphText('Add Player',color: MyColors.primaryColor,fontSize:15,underlined: true,)
-                          ],
+
+                        ///add player button
+                        InkWell(
+                          onTap: (){
+
+                            print("aaaaaa${player.length}");
+                            player.add({'player': TextEditingController()});
+                            print("bbbbbbb${player.length}");
+                            setState(() {
+
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon((Icons.add),color:MyColors.primaryColor,size: 15,),
+                              ParagraphText('Add Player',color: MyColors.primaryColor,fontSize:15,underlined: true,)
+                            ],
+                          ),
                         ),
+
+
                         RoundEdgedButton(text: 'Start the game',fontSize: 20,borderRadius:10,color:MyColors.primaryColor,textColor: MyColors.whiteColor,onTap: (){push(context: context, screen: MatchingScreen());},),
                       ],
                     )
 
                 ),
-                vSizedBox8,
-                vSizedBox8,
-                GestureDetector(
-                  onTap: (){
-                    push(context: context, screen: HomeScreen());
-                  },
-                  child: Center(
-                    child: ParagraphText
-                      ('Two players?',color: Colors.white,fontWeight: FontWeight.w600,fontSize: 15,underlined: true,),
-                  ),
-                ),
+
+
 
 
 
               ],
             ),
+          ),
+        ),
+        bottomNavigationBar:  GestureDetector(
+          onTap: (){
+            push(context: context, screen: HomeScreen());
+          },
+          child: Container(
+            height: 70,
+            alignment: Alignment.center,
+            child: ParagraphText
+              ('Two players?',color: Colors.white,fontWeight: FontWeight.w600,fontSize: 15,underlined: true,),
           ),
         ),
 

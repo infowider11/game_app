@@ -21,6 +21,7 @@ class DropDwon extends StatefulWidget {
   final double? dropdownwidth;
   final double? buttonheight;
   String? selectedValue;
+  final Function(dynamic)? onChanged;
   DropDwon({
     Key? key,
     this.label = 'label',
@@ -36,6 +37,7 @@ class DropDwon extends StatefulWidget {
     this.islabel = true,
     this.selectedValue,
     this.dropdownWidth,
+    this.onChanged,
     this.buttoncolorColor= Colors.transparent,
     this.buttonwidth,
     this.buttonheight=50,
@@ -105,11 +107,7 @@ class _DropDwonState extends State<DropDwon> {
                 ))
                     .toList(),
                 value: widget.selectedValue,
-                onChanged: (value) {
-                  setState(() {
-                    widget.selectedValue = value as String?;
-                  });
-                },
+                onChanged:widget.onChanged,
                 icon: const Icon(
                   Icons.expand_more_outlined,
                 ),

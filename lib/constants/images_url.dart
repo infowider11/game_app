@@ -37,6 +37,7 @@ class MyImages{
 
   static const splash = baseImageUrl + 'splash.png';
   static const bglogo = baseImageUrl + 'bglogo.png';
+  static const unlock = baseImageUrl + 'unlock.png';
   static const card = baseImageUrl + 'card.png';
   static const strip = baseImageUrl + 'strip.png';
   static const spinner = baseImageUrl + 'spinner.png';

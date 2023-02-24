@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameapp/widgets/customLoader.dart';
 
 
 import '../constants/colors.dart';
@@ -23,6 +24,7 @@ class RoundEdgedButton extends StatelessWidget {
   final String? icon;
   final bool showGradient;
   final  FontWeight?  fontWeight;
+  final bool load;
 
   const RoundEdgedButton(
       {Key? key,
@@ -44,6 +46,7 @@ class RoundEdgedButton extends StatelessWidget {
         this.showGradient = false,
         this.height=50,
         this.fontWeight= FontWeight.w600,
+        this.load = false,
 
         // required this.hasGradient,
       this.isSolid=true})
@@ -52,7 +55,7 @@ class RoundEdgedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap:load?null: onTap,
       child: Container(
          height: height,
         margin: EdgeInsets.symmetric(horizontal: horizontalMargin,vertical: verticalMargin),
@@ -103,6 +106,11 @@ class RoundEdgedButton extends StatelessWidget {
                 // letterSpacing: 2,
               ),
             ),
+            if(load)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: CustomLoader(color:textColor??(isWhite?MyColors.primaryColor:isSolid? Colors.white:color),),
+              )
 
 
           ],

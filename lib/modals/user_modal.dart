@@ -1,45 +1,47 @@
-//
-//
-//
-//
-// import '../constants/global_data.dart';
-//
-// class UserModal {
-//   String userId;
-//   String name;
-//   String emailId;
-//   String gender;
-//   String city;
-//   String country;
-//   String phone;
-//   UserType userType;
-//
-//   UserModal({
-//     required this.userId,
-//     required this.emailId,
-//     required this.gender,
-//     required this.city,
-//     required this.country,
-//     required this.phone,
-//     required this.name,
-//     required this.userType,
-//
-//   });
-//
-//   factory UserModal.fromJson(Map userData) {
-//     print('Creating user modal with experiment = ${(userData['is_any_active_experiment']??'0').toString()=='0'} and id ${userData['is_any_active_experiment']}');
-//     return UserModal(
-//       userId: userData['id']??'0',
-//       name: userData['name'],
-//       emailId: userData['email'],
-//       gender: userData['gender'],
-//       city: userData['city'],
-//       country: userData['country'],
-//       phone: userData['phone'],
-//       userType: UserType.Cleaners
-//
-//     );
-//   }
-// }
-//
-//
+
+
+import 'package:gameapp/constants/global_data.dart';
+
+class UserModal {
+  int userId;
+  String firstName;
+  String lastName;
+  String emailId;
+  String gender;
+  String token;
+  String fullName;
+  Map fullData;
+
+  UserModal({
+    required this.userId,
+    required this.emailId,
+    required this.gender,
+    required this.firstName,
+    required this.lastName,
+    required this.token,
+    required this.fullData,
+    required this.fullName,
+
+  });
+
+  factory UserModal.fromJson(Map userMap) {
+    print('Creating user modal with experiment = ${(userMap['is_any_active_experiment']??'0').toString()=='0'} and id ${userMap['is_any_active_experiment']}');
+    String fullName = userMap['first_name'];
+    if(userMap['last_name']!=''){
+      fullName +=' ' +userMap['last_name'];
+    }
+    return UserModal(
+      userId: userMap['id']??'0',
+      firstName: userMap['first_name']??'',
+      lastName: userMap['last_name']??'',
+      emailId: userMap['email'],
+      gender: userMap['gender']??'Male',
+      token: userMap['token']??userToken,
+      fullData: userMap,
+      fullName:fullName
+
+    );
+  }
+}
+
+

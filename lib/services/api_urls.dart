@@ -1,7 +1,13 @@
 class ApiUrls {
   static const baseUrl =
-      'http://bluediamondresearch.com/WEB01/blind_dating/Api/';
-  // static const String get_values = baseUrl + 'get_values';
+      'https://nextjs.webwiders.in/CopiaDeCream/api/';
+  static const String updateDeviceToken = baseUrl + 'update_device_id';
+  static const String login = baseUrl + 'login';
+  static const String signup = baseUrl + 'signup';
+  static const String changePassword = baseUrl + 'change-password';
+  static const String forgetPassword = baseUrl + 'forgot-password';
+  static const String editProfile = baseUrl + 'edit-profile';
+  static const String getUserDetails = baseUrl + 'user-profile';
 
 
 

@@ -25,7 +25,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
       backgroundColor: Colors.black,
       drawer: get_drawer(context,),
       key: scaffoldKey,
-      appBar: appbar1('John Smith',(){scaffoldKey.currentState?.openDrawer();}),
+      appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
       body: Container(
         height:MediaQuery.of(context).size.height,
         width:MediaQuery.of(context).size.width,

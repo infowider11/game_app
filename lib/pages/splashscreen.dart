@@ -8,7 +8,10 @@ import 'package:gameapp/constants/images_url.dart';
 import 'package:gameapp/pages/loginscreen.dart';
 import 'package:gameapp/widgets/CustomTexts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../functions/navigation_functions.dart';
+import '../services/local_services.dart';
+import 'homescreen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -19,16 +22,22 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin  {
   // late AnimationController _controller;
 
+
+
+  initializeEverything()async{
+    bool isLoggedIn = await MyLocalServices.isLoggedIn();
+    if(isLoggedIn){
+      pushReplacement(context: context, screen: HomeScreen());
+    }else{
+      pushReplacement(context: context, screen: LoginScreen());
+    }
+
+  }
+
   void initState() {
     // // TODO: implement initState
     // _controller = AnimationController(duration: Duration(milliseconds: (1)), vsync: this,);
-    Future.delayed(Duration(seconds:2)).then((value)  {
-        pushReplacement(context: context, screen: LoginScreen());
-
-    });
-    // Future.delayed(Duration(seconds:5)).then((value)  {
-    //   pushReplacement(context: context, screen: LoginScreen());
-    // });
+    initializeEverything();
     super.initState();
   }
   @override

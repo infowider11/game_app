@@ -3,12 +3,18 @@ import 'package:gameapp/constants/colors.dart';
 import 'package:gameapp/constants/images_url.dart';
 import 'package:gameapp/constants/sized_box.dart';
 import 'package:gameapp/functions/navigation_functions.dart';
+import 'package:gameapp/functions/validators.dart';
 import 'package:gameapp/pages/loginscreen.dart';
 import 'package:gameapp/widgets/CustomTexts.dart';
 import 'package:gameapp/widgets/custom_text_field.dart';
 import 'package:gameapp/widgets/dropdown.dart';
 
+import '../constants/global_keys.dart';
+import '../services/api_urls.dart';
+import '../services/local_services.dart';
+import '../services/webservices.dart';
 import '../widgets/round_edged_button.dart';
+import 'homescreen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -18,12 +24,14 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController emailController = TextEditingController();
 
-  TextEditingController fullNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String? gender;
+  ValueNotifier<bool> pageLoad=ValueNotifier(false);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -70,8 +78,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: Color(0xffffffff)),
                     vSizedBox2,
                     CustomTextField(
-                      controller: fullNameController,
-                      hintText: 'Full Name',
+                      controller: firstNameController,
+                      hintText: 'First Name',
+                      hintcolor: Colors.white,
+                      textColor: Colors.white,
+                      bgColor: Colors.transparent,
+                      fontsize: 15,
+                      borderRadius: 10,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    // vSizedBox2,
+                    CustomTextField(
+                      controller: lastNameController,
+                      hintText: 'Last Name',
                       hintcolor: Colors.white,
                       textColor: Colors.white,
                       bgColor: Colors.transparent,
@@ -82,6 +101,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     DropDwon(
                       items: ['Male', 'Female'],
                       selectedValue: gender,
+                      onChanged: (val){
+                        print('the val is ${val}');
+                        gender = val;
+                        setState(() {
+
+                        });
+                      },
 
                     ),
                     vSizedBox05,
@@ -115,18 +141,52 @@ class _SignupScreenState extends State<SignupScreen> {
                       obscureText: true,
                     ),
                     vSizedBox2,
-                    RoundEdgedButton(
-                      text: 'Signup',
-                      fontSize: 20,
-                      borderRadius: 10,
-                      color: MyColors.primaryColor,
-                      textColor: MyColors.whiteColor,
-                      onTap: () {
-                        print('the data is ${gender}');
-                        if (fullNameController.text.isNotEmpty) {
-                        } else if (passwordController.text.isNotEmpty) {
-                        } else {}
-                      },
+                    ValueListenableBuilder(
+                        valueListenable: pageLoad,
+                        builder: (context, pageLoadValue,child,) {
+                        return RoundEdgedButton(
+                          text: 'Signup',
+                          fontSize: 20,
+                          borderRadius: 10,
+                          color: MyColors.primaryColor,
+                          textColor: MyColors.whiteColor,
+                          load: pageLoadValue,
+                          onTap: ()async {
+                            print('the data is ${gender}');
+                            if (MyValidators.isStringInvalid(firstNameController.text, 'Please enter your first name.') ||
+                                MyValidators.isStringInvalid(lastNameController.text, 'Please enter your last name.') ||
+                                MyValidators.isStringInvalid(gender, 'Please select your gender.') ||
+                            MyValidators.isEmailInvalid(emailController.text) ||
+                            MyValidators.isPasswordInvalid(passwordController.text) ||
+                                MyValidators.isPasswordInvalid(confirmPasswordController.text) ||
+                            MyValidators.isPasswordMatched(passwordController.text, confirmPasswordController.text)
+                            ) {}
+                            else {
+                              print('I am here');
+                              pageLoad.value=true;
+                              var request = {
+                                'first_name':firstNameController.text,
+                                'last_name':lastNameController.text,
+                                'gender':gender,
+                                'email': emailController.text,
+                                'password': passwordController.text,
+                              };
+                              var jsonResponse = await Webservices.postData(apiUrl: ApiUrls.signup, request: request);
+                              if(jsonResponse['status']==1){
+                                MyLocalServices.updateSharedPreferences(jsonResponse['data']);
+                                Navigator.popUntil(MyGlobalKeys.navigatorKey.currentContext!, (route) => route.isFirst);
+                                await pushReplacement(context: MyGlobalKeys.navigatorKey.currentContext!, screen: HomeScreen());
+                            // pageLoad.value=false;
+
+                            }else{
+                            // await Future.delayed(Duration(seconds: 10));
+                            pageLoad.value=false;
+                            }
+
+                          }
+                          },
+                        );
+                      }
                     ),
                     vSizedBox2,
                     GestureDetector(

@@ -25,7 +25,7 @@ class _MatchedScreenState extends State<MatchedScreen> {
       key: scaffoldKey,
       drawer: get_drawer(context,),
 
-      appBar: appbar1('John Smith',(){scaffoldKey.currentState?.openDrawer();}),
+      appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(

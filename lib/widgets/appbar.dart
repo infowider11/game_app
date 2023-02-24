@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameapp/services/local_services.dart';
 
 import '../constants/colors.dart';
 import '../constants/sized_box.dart';
@@ -49,6 +50,7 @@ AppBar appBar(
             Center(
               child: GestureDetector(
                 onTap: ()async{
+                  await MyLocalServices.logout();
                   // await logout();
                   //
                   // Navigator.popUntil(context, (route) => route.isFirst);
@@ -70,12 +72,17 @@ AppBar appBar(
 
 }
 
-AppBar appbar1(String title,[VoidCallback? onTap]){
+AppBar appbar1( {String? title, Function()? onTap}){
   return AppBar(
     leading: GestureDetector(
       onTap:onTap ,
         child: Icon(Icons.menu_outlined)),
-    title: Text(title),
+    title: title!=null?Text(title): ValueListenableBuilder(
+        valueListenable: userDataNotifier,
+        builder: (context, userData, child) {
+        return Text(userData!.fullName);
+      }
+    ),
     centerTitle: true,
     backgroundColor: Colors.transparent,
   );

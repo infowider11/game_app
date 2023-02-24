@@ -104,7 +104,7 @@ class CustomTextField extends StatelessWidget {
 
             autofocus: autofocus!,
             textAlignVertical: TextAlignVertical.center,
-            enableInteractiveSelection: false,
+            enableInteractiveSelection: true,
             enabled: enabled,
             decoration: InputDecoration(
               contentPadding:contentPadding,

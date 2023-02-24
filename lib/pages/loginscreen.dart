@@ -1,10 +1,15 @@
 
 import 'package:flutter/material.dart';
+import 'package:gameapp/functions/validators.dart';
 import 'package:gameapp/pages/forgotpassword.dart';
 import 'package:gameapp/pages/homescreen.dart';
 import 'package:gameapp/pages/signupscreen.dart';
+import 'package:gameapp/services/api_urls.dart';
+import 'package:gameapp/services/local_services.dart';
+import 'package:gameapp/services/webservices.dart';
 import '../constants/colors.dart';
 import '../constants/global_data.dart';
+import '../constants/global_keys.dart';
 import '../constants/images_url.dart';
 import '../constants/sized_box.dart';
 import '../functions/navigation_functions.dart';
@@ -19,13 +24,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email  =TextEditingController();
-  TextEditingController password  =TextEditingController();
-  bool check=true;
+  TextEditingController emailController=TextEditingController();
+  TextEditingController passwordController=TextEditingController();
+  ValueNotifier<bool> pageLoad=ValueNotifier(false);
+  // bool check=true;
   @override
   Widget build(BuildContext context) {
-    TextEditingController email=TextEditingController();
-    TextEditingController password=TextEditingController();
+    // pageLoad.value=true;
     return SafeArea(
       child: Scaffold(
           backgroundColor:MyColors.blackColor,
@@ -53,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ParagraphText('Hello welcome back to our account',color: Color(0xffffffff)),
                     vSizedBox2,
                     CustomTextField(
-                      controller: email,
+                      controller: emailController,
                       hintText: 'Enter Email',
                       hintcolor: Colors.white,
                       textColor: Colors.white,
@@ -63,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                     ),
                     CustomTextField(
-                      controller: password,
+                      controller: passwordController,
                       hintcolor: Colors.white,
                       textColor: Colors.white,
 
@@ -85,12 +90,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     vSizedBox2,
-                    RoundEdgedButton(text: 'Login',
-                      fontSize: 20,
-                      borderRadius:10,
-                      color:MyColors.primaryColor,
-                      textColor: MyColors.whiteColor,
-                      onTap: (){push(context: context, screen: HomeScreen());},),
+                    ValueListenableBuilder(
+                      valueListenable: pageLoad,
+                      builder: (context, pageLoadValue,child,) {
+                        return RoundEdgedButton(text: 'Login',
+                          fontSize: 20,
+                          borderRadius:10,
+                          color:MyColors.primaryColor,
+                          textColor: MyColors.whiteColor,
+                          load: pageLoadValue,
+                          onTap: ()async{
+
+                          if(MyValidators.isEmailInvalid(emailController.text) && MyValidators.isPasswordInvalid(passwordController.text)){
+
+                          }else{
+                            pageLoad.value=true;
+                            var request = {
+                              'email': emailController.text,
+                              'password': passwordController.text,
+                            };
+                            var jsonResponse = await Webservices.postData(apiUrl: ApiUrls.login, request: request);
+                            if(jsonResponse['status']==1){
+                              MyLocalServices.updateSharedPreferences(jsonResponse['data']);
+                              Navigator.popUntil(MyGlobalKeys.navigatorKey.currentContext!, (route) => route.isFirst);
+                              await pushReplacement(context: MyGlobalKeys.navigatorKey.currentContext!, screen: HomeScreen());
+                              // pageLoad.value=false;
+
+                            }else{
+                              // await Future.delayed(Duration(seconds: 10));
+                              pageLoad.value=false;
+                            }
+
+                          }
+                          },);
+                      }
+                    ),
 
                     vSizedBox2,
                     GestureDetector(
