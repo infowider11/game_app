@@ -16,6 +16,7 @@ import '../constants/colors.dart';
 import '../constants/sized_box.dart';
 import '../widgets/CustomTexts.dart';
 import '../widgets/drawer.dart';
+import 'new_animation_screen.dart';
 class HomeMultiplePlayerScreen extends StatefulWidget {
   const HomeMultiplePlayerScreen({Key? key}) : super(key: key);
 
@@ -43,7 +44,7 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: get_drawer(context,),
+        drawer: get_drawer(context,scaffoldKey),
         key: scaffoldKey,
         backgroundColor: Colors.black,
         appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
@@ -277,7 +278,7 @@ class _HomeMultiplePlayerScreenState extends State<HomeMultiplePlayerScreen> {
                           ),
                         ),
 
-
+                        // RoundEdgedButton(text: 'Start the game',fontSize: 20,borderRadius:10,color:MyColors.primaryColor,textColor: MyColors.whiteColor,onTap: (){push(context: context, screen: NewAnimationScreen());},),
                         RoundEdgedButton(text: 'Start the game',fontSize: 20,borderRadius:10,color:MyColors.primaryColor,textColor: MyColors.whiteColor,onTap: (){push(context: context, screen: MatchingScreen());},),
                       ],
                     )

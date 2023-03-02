@@ -15,15 +15,50 @@ class MatchedScreen extends StatefulWidget {
   State<MatchedScreen> createState() => _MatchedScreenState();
 }
 
-class _MatchedScreenState extends State<MatchedScreen> {
+class _MatchedScreenState extends State<MatchedScreen> with TickerProviderStateMixin{
   var scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  int seconds = 2;
+
+  //
+  // startAnimation()async{
+  //   _controller = AnimationController(
+  //       vsync: this,
+  //       duration: Duration(seconds: seconds),
+  //       animationBehavior: AnimationBehavior.preserve
+  //   );
+  //   _animation = Tween<double>(begin: 0, end: 5).animate(_controller)
+  //     ..addListener(() {
+  //     });
+  // }
+
+  final _opacityTween = Tween<double>(begin: 0.0, end: 1.0);
+
+  startAnimation()async{
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _controller.forward();
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    startAnimation();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _controller.forward();
     return Scaffold(
       backgroundColor: Colors.black,
       key: scaffoldKey,
-      drawer: get_drawer(context,),
+      drawer: get_drawer(context,scaffoldKey),
 
       appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
       body: Container(
@@ -35,8 +70,17 @@ class _MatchedScreenState extends State<MatchedScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RoundEdgedButton(text: 'Truth',color: MyColors.primaryColor,width: 176,borderRadius: 8,height: 52,fontSize: 20,verticalMargin: 0,
-              onTap: (){push(context: context, screen: QuestionScreen());},
+            AnimatedBuilder(
+                animation: _controller,
+                builder: (BuildContext context, Widget? child) {
+                  // print('the controller opacity is');
+                return Opacity(
+                  opacity: _opacityTween.evaluate(_controller),
+                  child: RoundEdgedButton(text: 'Truth',color: MyColors.primaryColor,width: 176,borderRadius: 8,height: 52,fontSize: 20,verticalMargin: 0,
+                    onTap: (){push(context: context, screen: QuestionScreen());},
+                  ),
+                );
+              }
             ),
 
             Padding(

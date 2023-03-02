@@ -1,12 +1,22 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gameapp/modals/game_level_modal.dart';
 
 Map<String, String> globalHeaders ={
   'Accept':'application/json',
   // 'Authorization': 'Bearer  kgfklgfklagkljas'
 };
 
+
+enum Gender{
+  male, female
+}
 List globalLanguagesList = ['English','Spanish', 'Portuguese'];
 ValueNotifier<String> selectedLanguage = ValueNotifier(globalLanguagesList[0]);
+
+
+List<GameLevelModal> gameLevels = [];
+ValueNotifier<GameLevelModal?> selectedGameLevel = ValueNotifier(null);
+// List gameLevelsList = [];
 
 String userToken = '';
 List payment=[

@@ -6,11 +6,15 @@ import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:gameapp/constants/colors.dart';
 import 'package:gameapp/constants/images_url.dart';
 import 'package:gameapp/pages/loginscreen.dart';
+import 'package:gameapp/services/api_urls.dart';
 import 'package:gameapp/widgets/CustomTexts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/global_data.dart';
 import '../functions/navigation_functions.dart';
+import '../modals/game_level_modal.dart';
 import '../services/local_services.dart';
+import '../services/webservices.dart';
 import 'homescreen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -24,7 +28,13 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
 
 
+  getGameLevels()async{
+    List gameLevelsList = await Webservices.getList(ApiUrls.getGameLevels);
+    gameLevels = List.generate(gameLevelsList.length, (index) => GameLevelModal.fromJson(gameLevelsList[index])).toList();
+  }
+
   initializeEverything()async{
+    await getGameLevels();
     bool isLoggedIn = await MyLocalServices.isLoggedIn();
     if(isLoggedIn){
       pushReplacement(context: context, screen: HomeScreen());
@@ -51,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
            Image.asset(MyImages.splash,height: 172,width: 184,),
            ParagraphText('Copia de Cream',color:MyColors.primaryColor,fontFamily: 'AbrilFatfaceRegular',fontSize: 25,)
          ],
-       )
+       ),
 
      )
 

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gameapp/constants/box_shadow.dart';
 import 'package:gameapp/constants/images_url.dart';
+import 'package:gameapp/modals/user_modal.dart';
 import 'package:gameapp/pages/changepassword.dart';
 import 'package:gameapp/pages/editprofilescreen.dart';
 import 'package:gameapp/pages/homemultipleplayerscreen.dart';
@@ -25,7 +26,7 @@ import '../services/local_services.dart';
 import '../widgets/CustomTexts.dart';
 import 'custom_confirmation_dialog.dart';
 
-Drawer get_drawer(BuildContext context) {
+Drawer get_drawer(BuildContext context,  GlobalKey<ScaffoldState> scaffoldKey) {
   TextEditingController emailcontroller = TextEditingController();
   return Drawer(
     // Add a ListView to the drawer. This ensures the user can scroll
@@ -53,10 +54,15 @@ Drawer get_drawer(BuildContext context) {
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
-                    ParagraphText(
-                      'ID: 351ASDF',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                    ValueListenableBuilder<UserModal?>(
+                      valueListenable: userDataNotifier,
+                      builder: (context, userData, child) {
+                        return ParagraphText(
+                          'ID: ${userData!.gameId}',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        );
+                      }
                     )
                   ],
                 ),
@@ -162,118 +168,137 @@ Drawer get_drawer(BuildContext context) {
                   fontWeight: FontWeight.w600,
                 ),
                 vSizedBox2,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(context,
-                    //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
-                    push(context: context, screen: HomeMultiplePlayerScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        MyImages.kela,
-                        height: 15,
-                        width: 15,
-                      ),
-                      hSizedBox,
-                      ParagraphText(
-                        'MILD/FRIENDSHIP',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      )
-                    ],
-                  ),
-                ),
-                vSizedBox2,
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-                    // Navigator.push(context,
-                    //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
-                    push(context: context, screen: UnlockScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(MyImages.lips,height:16,width: 16,),
-                      hSizedBox,
-                      ParagraphText('UPLOADED/SEDUCTION',color: Colors.white,fontWeight: FontWeight.w500,)
-                    ],
-                  ),
-                ),
-                vSizedBox2,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(context,
-                    //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
-                    push(context: context, screen: HomeMultiplePlayerScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        MyImages.lips,
-                        height: 16,
-                        width: 16,
-                      ),
-                      hSizedBox,
-                      ParagraphText(
-                        'UPLOADED/SEDUCTION',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      )
-                    ],
-                  ),
-                ),
-                vSizedBox2,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(context,
-                    //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
-                    push(context: context, screen: HomeMultiplePlayerScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        MyImages.strong,
-                        height: 15,
-                        width: 15,
-                      ),
-                      hSizedBox,
-                      ParagraphText(
-                        ' STRONG/PASSION',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      )
-                    ],
-                  ),
-                ),
-                vSizedBox2,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Navigator.push(context,
-                    //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
-                    push(context: context, screen: HomeMultiplePlayerScreen());
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        MyImages.sex,
-                        height: 15,
-                        width: 15,
-                      ),
-                      hSizedBox,
-                      ParagraphText(
-                        'EXTREME/SEX',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      )
-                    ],
-                  ),
-                ),
-                vSizedBox,
+               for(int i = 0;i<gameLevels.length;i++)
+                 GestureDetector(
+                   onTap: () {
+                     if(gameLevels[i].isFree){
+                       selectedGameLevel.value = gameLevels[i];
+                       Navigator.pop(context);
+                       // push(context: context, screen: HomeMultiplePlayerScreen());
+                     }else{
+                       push(context: context, screen: UnlockScreen());
+                     }
+
+                   },
+                   child: Padding(
+                     padding: const EdgeInsets.symmetric(vertical: 10),
+                     child: Row(
+                       children: [
+                         Image.network(
+                           gameLevels[i].imageUrl,
+                           height: 15,
+                           width: 15,
+                         ),
+                         hSizedBox,
+                         Expanded(
+                           child: ParagraphText(
+                             '${gameLevels[i].name}',
+                             color: Colors.white,
+                             fontWeight: FontWeight.w500,
+                           ),
+                         ),
+                         if(gameLevels[i].isFree)
+                         Container(
+                           padding: EdgeInsets.all(5),
+                           decoration: BoxDecoration(
+                             borderRadius: BorderRadius.circular(12),
+                             border: Border.all(color: MyColors.whiteColor, width: 0.3),
+                           ),
+                           child: ParagraphText('Free', fontSize: 8,color: Colors.white,),
+                         )
+                       ],
+                     ),
+                   ),
+                 ),
+                // vSizedBox2,
+                // GestureDetector(
+                //   onTap: (){
+                //     Navigator.pop(context);
+                //     // Navigator.push(context,
+                //     //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
+                //     push(context: context, screen: UnlockScreen());
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Image.asset(MyImages.lips,height:16,width: 16,),
+                //       hSizedBox,
+                //       ParagraphText('UPLOADED/SEDUCTION',color: Colors.white,fontWeight: FontWeight.w500,)
+                //     ],
+                //   ),
+                // ),
+                // vSizedBox2,
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     // Navigator.push(context,
+                //     //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
+                //     push(context: context, screen: HomeMultiplePlayerScreen());
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Image.asset(
+                //         MyImages.lips,
+                //         height: 16,
+                //         width: 16,
+                //       ),
+                //       hSizedBox,
+                //       ParagraphText(
+                //         'UPLOADED/SEDUCTION',
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w500,
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // vSizedBox2,
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     // Navigator.push(context,
+                //     //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
+                //     push(context: context, screen: HomeMultiplePlayerScreen());
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Image.asset(
+                //         MyImages.strong,
+                //         height: 15,
+                //         width: 15,
+                //       ),
+                //       hSizedBox,
+                //       ParagraphText(
+                //         ' STRONG/PASSION',
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w500,
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // vSizedBox2,
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     // Navigator.push(context,
+                //     //   PageTransition(type: PageTransitionType.rightToLeft, child: HomeMultiplePlayerScreen(),),);
+                //     push(context: context, screen: HomeMultiplePlayerScreen());
+                //   },
+                //   child: Row(
+                //     children: [
+                //       Image.asset(
+                //         MyImages.sex,
+                //         height: 15,
+                //         width: 15,
+                //       ),
+                //       hSizedBox,
+                //       ParagraphText(
+                //         'EXTREME/SEX',
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.w500,
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // vSizedBox,
               ],
             ),
           ),

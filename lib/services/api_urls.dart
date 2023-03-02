@@ -8,7 +8,6 @@ class ApiUrls {
   static const String forgetPassword = baseUrl + 'forgot-password';
   static const String editProfile = baseUrl + 'edit-profile';
   static const String getUserDetails = baseUrl + 'user-profile';
-
-
+  static const String getGameLevels = baseUrl + 'get-game-levels';
 
 }

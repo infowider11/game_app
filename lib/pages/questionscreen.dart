@@ -9,6 +9,7 @@ import 'package:gameapp/widgets/round_edged_button.dart';
 
 import '../widgets/appbar.dart';
 import '../widgets/drawer.dart';
+import 'new_animation_screen.dart';
 class QuestionScreen extends StatefulWidget {
   const QuestionScreen({Key? key}) : super(key: key);
 
@@ -23,7 +24,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      drawer: get_drawer(context,),
+      drawer: get_drawer(context,scaffoldKey),
       key: scaffoldKey,
       appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
       body: Container(
@@ -63,6 +64,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
               ]
             )),
             vSizedBox2,
+            // RoundEdgedButton(text: 'Start the game',fontSize: 20,borderRadius:10,color:MyColors.primaryColor,textColor: MyColors.whiteColor,onTap: (){push(context: context, screen: NewAnimationScreen());},),
             RoundEdgedButton(text: 'Next Dare',width: 176,height:52,borderRadius: 8,color: MyColors.primaryColor,fontSize: 20,onTap: (){pushReplacement(context: context, screen: MatchingScreen());},)
           ],
         ),

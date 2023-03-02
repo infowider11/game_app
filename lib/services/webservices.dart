@@ -139,7 +139,8 @@ class Webservices {
     }
     return [];
   }
-  static Future<List> getListFromRequestParameters(String url, Map<String, dynamic> request) async {
+  static Future<List> getListFromRequestParameters(String url, Map<String, dynamic> request,
+      {bool isGetMethod = true}) async {
 
     Map<String, dynamic> tempRequest = {};
     request.forEach((key, value) {
@@ -148,8 +149,22 @@ class Webservices {
       }
     });
     try{
+
+  String tempGetRequest = '?';
+  tempRequest.forEach((key, value) {
+  tempGetRequest +=key+'=' + value + '&';
+
+  });
+  tempGetRequest = tempGetRequest.substring(0,tempGetRequest.length-1);
+  print('the url issss $url$tempGetRequest');
+  late http.Response response;
+  if(isGetMethod){
+  response = await http.get(Uri.parse(url + tempGetRequest),headers: globalHeaders);
+  }else{
+  response = await http.post(Uri.parse(url), body: tempRequest,headers: globalHeaders);
+  }
       log('the request for url $url is $tempRequest');
-      var response = await http.post(Uri.parse(url), body: tempRequest,headers: globalHeaders);
+      // var response = await http.post(Uri.parse(url), body: tempRequest,headers: globalHeaders);
       if (response.statusCode == 200) {
         var jsonResponse = convert.jsonDecode(response.body);
         if (jsonResponse['status'] == 1) {

@@ -11,6 +11,7 @@ class UserModal {
   String token;
   String fullName;
   Map fullData;
+  String gameId;
 
   UserModal({
     required this.userId,
@@ -21,6 +22,7 @@ class UserModal {
     required this.token,
     required this.fullData,
     required this.fullName,
+    required this.gameId,
 
   });
 
@@ -38,6 +40,7 @@ class UserModal {
       gender: userMap['gender']??'Male',
       token: userMap['token']??userToken,
       fullData: userMap,
+        gameId: userMap['unique_id']??userMap['id']??'0',
       fullName:fullName
 
     );

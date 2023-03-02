@@ -126,7 +126,7 @@ class _MatchingScreenState extends State<MatchingScreen> with TickerProviderStat
     return Scaffold(
       backgroundColor: Colors.black,
         key: scaffoldKey,
-        drawer: get_drawer(context,),
+        drawer: get_drawer(context,scaffoldKey),
         appBar: appbar1(onTap: (){scaffoldKey.currentState?.openDrawer();}),
         body:show==1? Stack(
           alignment: Alignment.center,
