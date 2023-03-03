@@ -10,12 +10,17 @@ Map<String, String> globalHeaders ={
 enum Gender{
   male, female
 }
+
+enum QuestionType{
+  truth,dare
+}
 List globalLanguagesList = ['English','Spanish', 'Portuguese'];
 ValueNotifier<String> selectedLanguage = ValueNotifier(globalLanguagesList[0]);
 
 
 List<GameLevelModal> gameLevels = [];
 ValueNotifier<GameLevelModal?> selectedGameLevel = ValueNotifier(null);
+ValueNotifier<Map?> questionData = ValueNotifier(null);
 // List gameLevelsList = [];
 
 String userToken = '';

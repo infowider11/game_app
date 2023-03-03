@@ -32,6 +32,8 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController passwordController = TextEditingController();
   String? gender;
   ValueNotifier<bool> pageLoad=ValueNotifier(false);
+  ValueNotifier<bool> passwordShow=ValueNotifier(true);
+  ValueNotifier<bool> confirmPasswordShow=ValueNotifier(true);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,12 +48,13 @@ class _SignupScreenState extends State<SignupScreen> {
             ))),
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    vSizedBox6,
+                    vSizedBox2,
                     Center(
                       child: Image.asset(
                         MyImages.splash,
@@ -59,13 +62,22 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: 104,
                       ),
                     ),
-                    Center(
-                      child: ParagraphText(
-                        'Copia de Cream',
-                        color: MyColors.primaryColor,
-                        fontFamily: 'AbrilFatfaceRegular',
-                        fontSize: 25,
-                      ),
+                    // Center(
+                    //   child: ParagraphText(
+                    //     'Copia de Cream',
+                    //     color: MyColors.primaryColor,
+                    //     fontFamily: 'AbrilFatfaceRegular',
+                    //     fontSize: 25,
+                    //   ),
+                    // ),
+                    vSizedBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MainHeadingText('Versus',color:MyColors.whiteColor,fontSize:  35,fontWeight: FontWeight.w900,),
+                        hSizedBox,
+                        MainHeadingText('Hot',color:MyColors.primaryColor,fontSize: 35,fontWeight: FontWeight.w900,),
+                      ],
                     ),
                     vSizedBox2,
                     ParagraphText(
@@ -121,26 +133,52 @@ class _SignupScreenState extends State<SignupScreen> {
                       borderRadius: 10,
                       keyboardType: TextInputType.emailAddress,
                     ),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: 'Password',
-                      hintcolor: Colors.white,
-                      textColor: Colors.white,
-                      bgColor: Colors.transparent,
-                      fontsize: 15,
-                      borderRadius: 10,
-                      keyboardType: TextInputType.emailAddress,
+                    ValueListenableBuilder(
+                      valueListenable: passwordShow,
+                      builder: (context, value, child) {
+                        return CustomTextField(
+                          controller: passwordController,
+                          hintText: 'Password',
+                          hintcolor: Colors.white,
+                          textColor: Colors.white,
+                          bgColor: Colors.transparent,
+                          fontsize: 15,
+                          borderRadius: 10,
+                          obscureText: value,
+                          suffix: GestureDetector(
+                            onTap: (){
+                              passwordShow.value = !passwordShow.value;
+                            },
+                            child: Icon(
+                              !value?Icons.visibility:Icons.visibility_off, color: MyColors.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
                     ),
-                    CustomTextField(
-                      controller: confirmPasswordController,
-                      hintcolor: Colors.white,
-                      textColor: Colors.white,
-                      hintText: 'Confirm Password',
-                      bgColor: Colors.transparent,
-                      borderRadius: 8,
-                      obscureText: true,
+                    ValueListenableBuilder(
+                        valueListenable: confirmPasswordShow,
+                        builder: (context, value, child) {
+                        return CustomTextField(
+                          controller: confirmPasswordController,
+                          hintcolor: Colors.white,
+                          textColor: Colors.white,
+                          hintText: 'Confirm Password',
+                          bgColor: Colors.transparent,
+                          borderRadius: 8,
+                          obscureText: value,
+                          suffix: GestureDetector(
+                            onTap: (){
+                              confirmPasswordShow.value = !confirmPasswordShow.value;
+                            },
+                            child: Icon(
+                              !value?Icons.visibility:Icons.visibility_off, color: MyColors.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
                     ),
-                    vSizedBox2,
+                    // vSizedBox,
                     ValueListenableBuilder(
                         valueListenable: pageLoad,
                         builder: (context, pageLoadValue,child,) {
@@ -188,7 +226,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         );
                       }
                     ),
-                    vSizedBox2,
+                    vSizedBox,
                     GestureDetector(
                       onTap: () {
                         push(context: context, screen: LoginScreen());

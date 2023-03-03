@@ -9,5 +9,6 @@ class ApiUrls {
   static const String editProfile = baseUrl + 'edit-profile';
   static const String getUserDetails = baseUrl + 'user-profile';
   static const String getGameLevels = baseUrl + 'get-game-levels';
+  static const String getBothQuestions = baseUrl + 'get-both-question';
 
 }

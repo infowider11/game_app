@@ -145,12 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         onTap: ()async{
-                                          selectedGameLevel.value = gameLevels[i];
-                                          // if(gameLevels[i].isFree){
-                                          //
-                                          // }else{
-                                          //   // push(context: context, screen: UnlockScreen());
-                                          // }
+
+                                          if(gameLevels[i].isFree){
+                                            selectedGameLevel.value = gameLevels[i];
+                                          }else{
+                                            push(context: context, screen: UnlockScreen());
+                                          }
                                           print('the value is ${selectedGameLevel.value}');
                                           showDropDown.value = false;
                                         },
@@ -221,6 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               hintText: 'Woman’s Name',
                               bgColor: Colors.black,
                               borderRadius: 10,
+                              maxLength: 8,
+
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 50),
                             ),
@@ -245,8 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               controller: manNameController,
                               hintcolor: Colors.white,
                               textColor: Colors.white,
-                              hintText: 'Men Name',
+                              hintText: 'Man\'s Name',
                               bgColor: Colors.black,
+                              maxLength: 8,
                               borderRadius: 10,
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 50),
@@ -274,9 +277,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           textColor: MyColors.whiteColor,
                           onTap: () {
 
+                            FocusScope.of(context).requestFocus(FocusNode());
                             if(selectedGameLevel.value==null){
                               showSnackbar('Please Select the game level');
-                            }else if(womanNameController.text.isEmpty){
+                            }
+                            else if(womanNameController.text.isEmpty){
                               showSnackbar('Please Type woman name');
                             }else if(manNameController.text.isEmpty){
                               showSnackbar('Please Type man name');
@@ -285,11 +290,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             }else{
                               List<GameUserModal> gameUsers= [];
                               gameUsers.add(
-                                GameUserModal(userName: womanNameController.text, gender: Gender.female)
-                              );
-                              gameUsers.add(
                                   GameUserModal(userName: manNameController.text, gender: Gender.male)
                               );
+                              gameUsers.add(
+                                  GameUserModal(userName: womanNameController.text, gender: Gender.female)
+                              );
+
                               push(
                                   context: context, screen: NewAnimationScreen(gameUsers: gameUsers,));
                             }

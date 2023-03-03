@@ -50,9 +50,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     vSizedBox6,
                     Center(child: Image.asset(MyImages.splash,height: 97,width: 104,),),
-                    Center(child: ParagraphText('Copia de Cream',color:MyColors.primaryColor,fontFamily: 'AbrilFatfaceRegular',fontSize: 25,),
-
+                    vSizedBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MainHeadingText('Versus',color:MyColors.whiteColor,fontSize:  35,fontWeight: FontWeight.w900,),
+                        hSizedBox,
+                        MainHeadingText('Hot',color:MyColors.primaryColor,fontSize: 35,fontWeight: FontWeight.w900,),
+                      ],
                     ),
+                    // Center(child: ParagraphText('Copia de Cream',color:MyColors.primaryColor,fontFamily: 'AbrilFatfaceRegular',fontSize: 25,),
+
+                    // ),
                     vSizedBox2,
                     ParagraphText('Login',color: Color(0xffffffff),fontWeight: FontWeight.w600,fontSize: 22,),
                     ParagraphText('Hello welcome back to our account',color: Color(0xffffffff)),
