@@ -37,6 +37,7 @@ class CustomTextField extends StatelessWidget {
   final bool textalign;
   final bool? autofocus;
   final FocusNode? focusNode;
+  final int? maxLength;
 
   CustomTextField({
     Key? key,
@@ -68,7 +69,8 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.textalign = false,
     this.width,
-    this.contentPadding
+    this.contentPadding,
+    this.maxLength
   }) : super(key: key);
 
   @override
@@ -99,6 +101,7 @@ class CustomTextField extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             keyboardType: keyboardType,
+            maxLength: maxLength,
 
             style: TextStyle(color:textColor, fontSize: fontsize,fontFamily: 'Regular'),
 
@@ -109,6 +112,7 @@ class CustomTextField extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding:contentPadding,
               suffix: suffix,
+              counterText: '',
               suffixStyle: TextStyle(
                   fontSize: 16
               ),

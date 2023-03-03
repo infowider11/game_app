@@ -5,6 +5,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:gameapp/constants/colors.dart';
 import 'package:gameapp/constants/images_url.dart';
+import 'package:gameapp/constants/sized_box.dart';
 import 'package:gameapp/pages/loginscreen.dart';
 import 'package:gameapp/services/api_urls.dart';
 import 'package:gameapp/widgets/CustomTexts.dart';
@@ -35,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   initializeEverything()async{
     await getGameLevels();
+
     bool isLoggedIn = await MyLocalServices.isLoggedIn();
     if(isLoggedIn){
       pushReplacement(context: context, screen: HomeScreen());
@@ -59,7 +61,15 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
        mainAxisAlignment: MainAxisAlignment.center,
          children: [
            Image.asset(MyImages.splash,height: 172,width: 184,),
-           ParagraphText('Copia de Cream',color:MyColors.primaryColor,fontFamily: 'AbrilFatfaceRegular',fontSize: 25,)
+           vSizedBox2,
+           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               MainHeadingText('Versus',color:MyColors.whiteColor,fontSize:  40,fontWeight: FontWeight.w900,),
+               hSizedBox,
+               MainHeadingText('Hot',color:MyColors.primaryColor,fontSize: 40,fontWeight: FontWeight.w900,),
+             ],
+           )
          ],
        ),
 
